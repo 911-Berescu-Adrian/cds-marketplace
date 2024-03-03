@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-type CdType = {
+export type CdType = {
     id: Number;
     title: String;
     artist: String;
