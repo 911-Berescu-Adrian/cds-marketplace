@@ -10,7 +10,11 @@ async function getCds(page: number, search: string) {
         skip: (page - 1) * 10,
         take: 10,
         where: {
-            OR: [{ title: { contains: search } }, { artist: { contains: search } }, { genre: { contains: search } }],
+            OR: [
+                { title: { contains: search, mode: "insensitive" } },
+                { artist: { contains: search, mode: "insensitive" } },
+                { genre: { contains: search, mode: "insensitive" } },
+            ],
         },
     });
     return res;
