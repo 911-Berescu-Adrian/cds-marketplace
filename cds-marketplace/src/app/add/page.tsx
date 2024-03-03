@@ -24,6 +24,7 @@ export default function AddPage() {
                     genre,
                     releasedYear,
                     price,
+                    //todo: add image from spotify
                     image: "https://miro.medium.com/200",
                 }),
                 headers: {
