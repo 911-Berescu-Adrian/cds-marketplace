@@ -44,9 +44,11 @@ export default function AddPage() {
     };
 
     return (
-        <div>
-            <Link href="/">Go back</Link>
-            <form className="flex flex-col space-y-4 w-64 mx-auto mt-28" onSubmit={handleSubmit}>
+        <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-10 text-center flex-flex-col items-center">
+            <Link href="/" className="text-blue-500 hover:text-blue-700">
+                &larr; Go back
+            </Link>
+            <form className="flex flex-col space-y-4 w-64 mx-auto mt-20" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                         Title
