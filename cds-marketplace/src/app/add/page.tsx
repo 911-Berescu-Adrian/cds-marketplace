@@ -25,10 +25,10 @@ export default function AddPage() {
         return res;
     };
 
-    const getImageForAlbum = async (album: string) => {
+    const getImageForAlbum = async (album: string, artist: string) => {
         "use server";
         const token = await getSpotifyToken();
-        const res = await fetch("https://api.spotify.com/v1/search?q=" + album + "&type=album", {
+        const res = await fetch("https://api.spotify.com/v1/search?q=" + album + "+" + artist + "&type=album", {
             headers: { Authorization: "Bearer " + token },
         })
             .then((res) => res.json())
@@ -44,7 +44,7 @@ export default function AddPage() {
         const genre = formData.get("genre");
         const releasedYear = formData.get("releasedYear");
         const price = formData.get("price");
-        const image = await getImageForAlbum(title as string);
+        const image = await getImageForAlbum(title as string, artist as string);
 
         try {
             await prisma.cd.create({
