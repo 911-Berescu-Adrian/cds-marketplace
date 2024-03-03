@@ -4,13 +4,24 @@ import Link from "next/link";
 import CdCard from "@/components/CdCard";
 import LuckyButton from "@/components/LuckyButton";
 
-async function getCds() {
+async function getCds(page: number) {
+    const res = await prisma.cd.findMany({
+        skip: (page - 1) * 10,
+        take: 10,
+    });
+    return res;
+}
+
+async function getAllCds() {
     const res = await prisma.cd.findMany();
     return res;
 }
 
-export default async function Home() {
-    const cds = await getCds();
+export default async function Home({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
+    const page = searchParams["page"] ?? "1";
+    const allCds = await getAllCds();
+    const cds = await getCds(parseInt(page));
+    const maxPage = Math.ceil((await prisma.cd.count()) / 10);
 
     return (
         <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-10 text-center flex-flex-col items-center">
@@ -22,12 +33,24 @@ export default async function Home() {
                 >
                     Add a new CD
                 </Link>
-                <LuckyButton cds={cds} />
+                <LuckyButton cds={allCds} />
             </div>
             <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10 mt-6 items-center align-center">
                 {cds.map((cd) => (
                     <CdCard key={cd.id} cd={cd} />
                 ))}
+            </div>
+            <div className="flex justify-center gap-4 mt-10">
+                {page !== "1" && (
+                    <Link href={`/?page=${parseInt(page) - 1}`} className="text-blue-500 hover:text-blue-700">
+                        &larr; Previous
+                    </Link>
+                )}
+                {page !== maxPage.toString() && (
+                    <Link href={`/?page=${parseInt(page) + 1}`} className="text-blue-500 hover:text-blue-700">
+                        Next &rarr;
+                    </Link>
+                )}
             </div>
         </div>
     );

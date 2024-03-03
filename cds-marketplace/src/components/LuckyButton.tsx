@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React from "react";
 import { CdType } from "./CdCard";
-import { useRouter } from "next/navigation";
 
 export default function LuckyButton({ cds }: { cds: CdType[] }) {
     return (
