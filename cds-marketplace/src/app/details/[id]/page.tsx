@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -16,9 +17,7 @@ export default async function CdDetails({ params }: { params: { id: Number } }) 
     return (
         <>
             <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-10 text-center flex-flex-col items-center">
-                <Link href="/" className="text-blue-500 hover:text-blue-700">
-                    &larr; Go back
-                </Link>
+                <BackButton />
                 <div className="mt-10">
                     <Image
                         src={cd.image.toString()}

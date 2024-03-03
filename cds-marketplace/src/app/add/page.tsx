@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { request } from "https";
 import { get } from "http";
 import { headers } from "next/headers";
+import BackButton from "@/components/BackButton";
 
 const BASE_URL = `https://accounts.spotify.com/api`;
 const client_id = process.env.SPOTIFY_CLIENT_ID;
@@ -66,9 +67,7 @@ export default function AddPage() {
 
     return (
         <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-10 text-center flex-flex-col items-center">
-            <Link href="/" className="text-blue-500 hover:text-blue-700">
-                &larr; Go back
-            </Link>
+            <BackButton />
             <form className="flex flex-col space-y-4 w-64 mx-auto mt-20" action={addCd}>
                 <div>
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700">
