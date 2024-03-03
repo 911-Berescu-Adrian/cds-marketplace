@@ -2,8 +2,40 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { request } from "https";
+import { get } from "http";
+import { headers } from "next/headers";
+
+const BASE_URL = `https://accounts.spotify.com/api`;
+const client_id = process.env.SPOTIFY_CLIENT_ID;
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
 export default function AddPage() {
+    const getSpotifyToken = async () => {
+        "use server";
+        const res = await fetch(`${BASE_URL}/token`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "grant_type=client_credentials&client_id=" + client_id + "&client_secret=" + client_secret,
+        })
+            .then((res) => res.json())
+            .then((data) => data.access_token);
+        return res;
+    };
+
+    const getImageForAlbum = async (album: string) => {
+        "use server";
+        const token = await getSpotifyToken();
+        const res = await fetch("https://api.spotify.com/v1/search?q=" + album + "&type=album", {
+            headers: { Authorization: "Bearer " + token },
+        })
+            .then((res) => res.json())
+            .then((data) => data.albums.items[0].images[0].url);
+        return res;
+    };
+
     const addCd = async (formData: FormData) => {
         "use server";
 
@@ -12,17 +44,22 @@ export default function AddPage() {
         const genre = formData.get("genre");
         const releasedYear = formData.get("releasedYear");
         const price = formData.get("price");
-        const image = "https://miro.medium.com/200";
-        await prisma.cd.create({
-            data: {
-                title: title as string,
-                artist: artist as string,
-                genre: genre as string,
-                releasedYear: parseInt(releasedYear as string),
-                price: parseFloat(price as string),
-                image: image,
-            },
-        });
+        const image = await getImageForAlbum(title as string);
+
+        try {
+            await prisma.cd.create({
+                data: {
+                    title: title as string,
+                    artist: artist as string,
+                    genre: genre as string,
+                    releasedYear: parseInt(releasedYear as string),
+                    price: parseFloat(price as string),
+                    image: image,
+                },
+            });
+        } catch (error) {
+            alert("Error adding CD: " + error);
+        }
         revalidatePath("/");
         redirect("/");
     };
