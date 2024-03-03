@@ -20,7 +20,7 @@ export default async function Home() {
             >
                 Add a new CD
             </Link>
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10 mt-6 items-center align-center ">
+            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10 mt-6 items-center align-center">
                 {cds.map((cd) => (
                     <CdCard key={cd.id} cd={cd} />
                 ))}
