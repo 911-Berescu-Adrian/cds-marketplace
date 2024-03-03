@@ -22,7 +22,7 @@ export default function SearchBar() {
                 </label>
                 <input
                     className="peer block sm:w-[70%] lg:w-[50%] rounded-full border border-gray-200 py-[9px] px-6 text-sm outline-2 placeholder:text-gray-500"
-                    placeholder={"Search..."}
+                    placeholder={"Search CDs by title, artist or genre..."}
                     onChange={(e) => {
                         handleSearch(e.target.value);
                     }}
