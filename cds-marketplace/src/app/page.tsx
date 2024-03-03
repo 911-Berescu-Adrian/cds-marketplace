@@ -3,11 +3,15 @@ import { prisma } from "../lib/prisma";
 import Link from "next/link";
 import CdCard from "@/components/CdCard";
 import LuckyButton from "@/components/LuckyButton";
+import SearchBar from "@/components/SearchBar";
 
-async function getCds(page: number) {
+async function getCds(page: number, search: string) {
     const res = await prisma.cd.findMany({
         skip: (page - 1) * 10,
         take: 10,
+        where: {
+            OR: [{ title: { contains: search } }, { artist: { contains: search } }, { genre: { contains: search } }],
+        },
     });
     return res;
 }
@@ -19,13 +23,15 @@ async function getAllCds() {
 
 export default async function Home({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
     const page = searchParams["page"] ?? "1";
+    const search = searchParams["search"] ?? "";
     const allCds = await getAllCds();
-    const cds = await getCds(parseInt(page));
+    const cds = await getCds(parseInt(page), search);
     const maxPage = Math.ceil((await prisma.cd.count()) / 10);
 
     return (
         <div className="mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-10 text-center flex-flex-col items-center">
             <h1 className="text-4xl font-bold">CDs Marketplace</h1>
+            <SearchBar />
             <div className="flex justify-center gap-4">
                 <Link
                     href="/add"
