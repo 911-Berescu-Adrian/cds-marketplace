@@ -6,6 +6,6 @@ Spotify Web API Integration\
 Server actions\
 Pagination, searching\
 Responsive with Tailwind\
-Database: Vercel Postgres with Prisma as the ORM\
-Tech Stack: Next.js App Router \
+Database: Vercel Postgres, Prisma as ORM\
+Tech Stack: Next.js 14\
 Deployment: On Vercel, [here](https://cds-marketplace.vercel.app/)
